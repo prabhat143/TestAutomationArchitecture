@@ -1,0 +1,21 @@
+{
+   "Samsung Galaxy S21" : {
+      "OS": "Android",
+      "Version" : "11"
+   },
+   "Google Pixel 6" : {
+      "OS": "Android",
+      "Version" : "12"
+   },
+   "iPhone 13 Pro" : {
+      "OS": "iOS",
+      "Version": "15.0"
+   },
+   "iPhone 12": {
+      "OS": "iOS",
+      "Version": "14.1"
+   },
+   "browserStackProperties": {
+      "buildTimeOut": "600"
+   }
+}
