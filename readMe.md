@@ -86,7 +86,7 @@ Configuration.properties file is main file from where framework will be controll
 
 **com.companyName.drivers.DriverManager** :- This class consists of two constructor paramter and non parameterised constructor. Parameter constructor configure Appiumserver device details. And initiate driver as per the configuration file.
 
-**com.companyName.drivers.DriverTypes** :- This an enum class record types of drivers present in the framework.
+**com.companyName.enums.DriverTypes** :- This an enum class record types of drivers present in the framework.
 
 **com.companyName.drivers.WebDriverClass** :- This class consists of method to configure brower like chrome,firefox and safari depends on OS.
 

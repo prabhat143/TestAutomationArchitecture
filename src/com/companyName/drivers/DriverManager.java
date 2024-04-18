@@ -1,5 +1,6 @@
 package com.companyName.drivers;
 
+import com.companyName.enums.DriverTypes;
 import com.companyName.localsetup.LocalServer;
 import com.companyName.utils.CommonUtils;
 import com.companyName.utils.FrameworkVariables;
@@ -58,23 +59,6 @@ public class DriverManager{
 				WebDriverClass webDriverClass = new WebDriverClass();
 				driver = webDriverClass.getDriver();
 				break;
-		}
-	}
-
-	public void initBrowserStackDriver(String methodName){
-		if(FrameworkVariables.PLATFORM.equalsIgnoreCase("BrowserStack")) {
-			if (FrameworkVariables.appUrl.contains("bs://XXXX")) {
-				CommonUtils.logInfo("Getting device OS: "+GetFrameworkKeys.initBrowserVar(System.getenv("AvailableDevices")).get("OS").toString());
-				if (GetFrameworkKeys.isAndroid(GetFrameworkKeys.initBrowserVar(System.getenv("AvailableDevices")).get("OS").toString())) {
-					FrameworkVariables.APP = System.getProperty("user.dir") + GetFrameworkKeys.getPropValue("appAndroid");
-				} else if (GetFrameworkKeys.isIOS(GetFrameworkKeys.initBrowserVar(System.getenv("AvailableDevices")).get("OS").toString())) {
-					FrameworkVariables.APP = System.getProperty("user.dir") + GetFrameworkKeys.getPropValue("appIOS");
-				}
-				FrameworkVariables.appUrl = CommonUtils.uploadAppUniRest(GetFrameworkKeys.getSecretsValue("browserStackUserName"), GetFrameworkKeys.getSecretsValue("browserStackAccessKey"), FrameworkVariables.APP);
-			}
-			CommonUtils.logInfo("App URL:" + FrameworkVariables.appUrl);
-			BrowserStackDriverClass browserStackDriverClass = new BrowserStackDriverClass(System.getenv("AvailableDevices"));
-			driver = browserStackDriverClass.getBSDriver(methodName);
 		}
 	}
 

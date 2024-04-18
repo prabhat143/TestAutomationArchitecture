@@ -1,7 +1,8 @@
 package com.companyName.base;
 
 import com.companyName.drivers.DriverManager;
-import com.companyName.reports.ExtentRunner;
+import com.companyName.reports.ReportManager;
+import com.companyName.reports.ReportManagerRunner;
 import com.companyName.utils.CommonUtils;
 import com.companyName.utils.FrameworkVariables;
 import com.companyName.utils.TestTrailUtils;
@@ -20,19 +21,14 @@ public class SubBaseTest extends BaseTest {
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod(@Optional String device,ITestResult result) {
         CommonUtils.logInfo("----------------------------------INSIDE BEFORE METHOD----------------------------------");
-        if(!FrameworkVariables.PLATFORM.equalsIgnoreCase("BrowserStack")) {
-            initDriver(device);
-        }else{
-            initBrowserStackInstance(result.getMethod().getMethodName());
-        }
+        initDriver(device);
     }
 
     @AfterMethod(alwaysRun = true)
     public void AfterMethod(ITestResult result) {
         CommonUtils.logInfo("----------------------------------INSIDE AFTER METHOD----------------------------------");
-        ExtentRunner.setReportCategories(result.getTestClass().getRealClass().getSimpleName());
-        CommonUtils.setBrowserStackStatus(DriverManager.getDriver(),result.isSuccess());
-        TestTrailUtils.getTestCaseId(result,CommonUtils.getAppVideoRest(DriverManager.getDriver()));
+        ReportManagerRunner.setReportCategories(result.getTestClass().getRealClass().getSimpleName());
+        TestTrailUtils.getTestCaseId(result);
         driverManger.closeDriver();
     }
 

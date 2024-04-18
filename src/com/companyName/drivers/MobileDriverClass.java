@@ -1,5 +1,6 @@
 package com.companyName.drivers;
 
+import com.companyName.enums.DriverTypes;
 import com.companyName.localsetup.LocalServer;
 import com.companyName.utils.FrameworkVariables;
 import com.companyName.utils.GetFrameworkKeys;

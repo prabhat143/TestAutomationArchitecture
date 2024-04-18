@@ -27,10 +27,6 @@ public class GetFrameworkKeys {
 		return prop;
 	}
 
-	public static HashMap<String,Object> initBrowserVar(String name) {
-			return JSONUtils.getJSONAsFlattenedMap(System.getProperty("user.dir")+ File.separator+"config"+File.separator+"browserstack.json",name);
-	}
-
 	private static Properties initSecretsVar() {
 		try {
 			fis = new FileInputStream(System.getProperty("user.dir")+"/config/secrets.properties");

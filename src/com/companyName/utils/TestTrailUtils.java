@@ -1,6 +1,6 @@
 package com.companyName.utils;
 
-import com.companyName.reports.ExtentManager;
+import com.companyName.reports.ReportManager;
 import com.companyName.testrail.APIClient;
 import com.companyName.testrail.APIException;
 import org.json.simple.JSONArray;
@@ -10,7 +10,10 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestTrailUtils {
     private static APIClient client=null;
@@ -107,7 +110,7 @@ public class TestTrailUtils {
         }
     }
 
-    public static void getTestCaseId(ITestResult result,String videoUrl) {
+    public static void getTestCaseId(ITestResult result) {
         try {
             if (runId != null) {
                 String caseId = result.getMethod().getConstructorOrMethod().getMethod().getAnnotation(Test.class).testName();
@@ -115,10 +118,10 @@ public class TestTrailUtils {
                     caseId = caseId.replaceAll("[cC]", "");
                     if (caseId.length() != 0 && result.isSuccess()) {
                         CommonUtils.logInfo(caseId + "  " + result.getStatus());
-                        caseIdStatusMap.put(caseId, new String[]{String.valueOf(result.getStatus()), "Test case working as expected",videoUrl});
+                        caseIdStatusMap.put(caseId, new String[]{String.valueOf(result.getStatus()), "Test case working as expected"});
                     } else if (caseId.length() != 0 && !result.isSuccess()){
                         CommonUtils.logInfo(caseId + "  " + result.getStatus() + " " + result.getThrowable().fillInStackTrace());
-                        caseIdStatusMap.put(caseId, new String[]{String.valueOf(result.getStatus()), "Test Case Failed with " + result.getThrowable().fillInStackTrace(),videoUrl});
+                        caseIdStatusMap.put(caseId, new String[]{String.valueOf(result.getStatus()), "Test Case Failed with " + result.getThrowable().fillInStackTrace()});
                     }
                 }
             }
@@ -130,7 +133,7 @@ public class TestTrailUtils {
     public static void addAttachmentToRun(){
         try {
             if(runId!=null) {
-                client.sendPost("add_attachment_to_run/" + runId, ExtentManager.reportLocation);
+                client.sendPost("add_attachment_to_run/" + runId, ReportManager.reportLocation);
             }
         } catch (IOException e) {
             e.printStackTrace();

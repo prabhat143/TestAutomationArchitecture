@@ -1,2 +1,14 @@
-.DS_Store
-.idea/
+# Default ignored files
+/shelf/
+/workspace.xml
+/.git/
+/.idea/
+/debug.log
+/GeneratedReport/Vida*
+/dependency-reduced-pom.xml
+/.settings/
+/target/
+/test-output/
+/.classpath
+/.project
+appium.log

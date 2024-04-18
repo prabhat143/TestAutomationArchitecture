@@ -1,5 +1,6 @@
 package com.companyName.utils;
 
+import com.companyName.drivers.DriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -16,9 +17,9 @@ public class WaitUtils {
 	 * @param ele
 	 * @param timeOut
 	 */
-	public static boolean waitForElementVisiblity(RemoteWebDriver driver,WebElement ele, int timeOut) {
+	public static boolean waitForElementVisiblity(WebElement ele, int timeOut) {
 		try{
-			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), timeOut);
 			wait.until(ExpectedConditions.visibilityOf(ele));
 			return true;
 		}catch (Exception e){
@@ -32,9 +33,9 @@ public class WaitUtils {
 	 *
 	 * @param by
 	 */
-	public static boolean waitForNestedEle(RemoteWebDriver driver,By parentLocator, By by) {
+	public static boolean waitForNestedEle(By parentLocator, By by) {
 		try{
-			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 10);
 			wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(parentLocator, by));
 			return true;
 		}catch (Exception e){
@@ -49,9 +50,9 @@ public class WaitUtils {
 	 * @param by
 	 * @param timeOut
 	 */
-	public static boolean waitForElementOnDom(RemoteWebDriver driver,By by, int timeOut) {
+	public static boolean waitForElementOnDom(By by, int timeOut) {
 		try{
-			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), timeOut);
 			wait.until(ExpectedConditions.presenceOfElementLocated(by));
 			return true;
 		}catch (Exception e){
@@ -66,9 +67,9 @@ public class WaitUtils {
 	 * @param ele
 	 * @param timeOut
 	 */
-	public static boolean waitForElementInvisible(RemoteWebDriver driver,WebElement ele, int timeOut) {
+	public static boolean waitForElementInvisible(WebElement ele, int timeOut) {
 		try{
-			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), timeOut);
 			wait.until(ExpectedConditions.invisibilityOf(ele));
 			return true;
 		}catch (Exception e){
@@ -83,9 +84,9 @@ public class WaitUtils {
 	 * @param ele
 	 * @param timeOut
 	 */
-	public static boolean waitForElementToEnable(RemoteWebDriver driver,WebElement ele, int timeOut) {
+	public static boolean waitForElementToEnable(WebElement ele, int timeOut) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), timeOut);
 			wait.until(ExpectedConditions.elementToBeClickable(ele));
 			return true;
 		}catch (Exception e){
@@ -101,9 +102,9 @@ public class WaitUtils {
 	 * @param timeOut
 	 * @param expectedString
 	 */
-	public static boolean waitForTextVisible(RemoteWebDriver driver,WebElement ele, int timeOut, String expectedString) {
+	public static boolean waitForTextVisible(WebElement ele, int timeOut, String expectedString) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), timeOut);
 			wait.until(ExpectedConditions.textToBePresentInElement(ele, expectedString));
 			return true;
 		}catch (Exception e){
@@ -111,9 +112,9 @@ public class WaitUtils {
 		}
 	}
 
-	public static boolean waitListElements(RemoteWebDriver driver,By ele, int timeOut) {
+	public static boolean waitListElements(By ele, int timeOut) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), timeOut);
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(ele));
 			return true;
 		}catch (Exception e){

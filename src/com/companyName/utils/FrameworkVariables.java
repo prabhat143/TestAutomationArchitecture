@@ -57,20 +57,6 @@ public class FrameworkVariables {
 			CommonUtils.logInfo("Configuration file is been created in below location: \n"+path);
 			Assert.fail("Please updated the configuration file as per the project requirement and rerun the framework");
 		}
-
-		path = System.getProperty("user.dir")+"/config/browserstack.json";
-		if(!new File(path).exists()) {
-			ExtractFiles.ExportResource("/config/browserstack.json");
-			CommonUtils.logInfo("browserstack file is been created in below location: \n"+path);
-			Assert.fail("Please updated the browserstack file as per the project requirement and rerun the framework");
-		}
-
-		path = System.getProperty("user.dir")+"/config/secrets.properties";
-		if(!new File(path).exists()) {
-			ExtractFiles.ExportResource("/config/secrets.properties");
-			CommonUtils.logInfo("Secret key file is been created in below location: \n"+path);
-			Assert.fail("Please encrypt the file before pushing the codes to repo");
-		}
 	}
 
 	public static void createReadME(){

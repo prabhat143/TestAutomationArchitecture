@@ -1,17 +1,12 @@
 package com.companyName.utils;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import com.companyName.drivers.DriverManager;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.openqa.selenium.*;
@@ -23,11 +18,13 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -467,24 +464,6 @@ public class CommonUtils {
         return null;
     }
 
-    public static String uploadAppUniRest(String userName, String accessKey, String appPath) {
-        Unirest.setTimeouts(0, 0);
-        HttpResponse<JsonNode> response = null;
-        String appUrl = null;
-        try {
-            response = Unirest.post("https://api-cloud.browserstack.com/app-automate/upload")
-                    .basicAuth(userName, accessKey)
-                    .field("file", new File(appPath))
-                    .asJson();
-            appUrl = response.getBody().getObject().get("app_url").toString();
-        } catch (UnirestException e) {
-            logInfo("AppUrl upload is not happened");
-        }
-
-        return appUrl;
-
-    }
-
     public static void sendNumericKeyBoard(RemoteWebDriver driver, String text) {
         char[] ch = text.toCharArray();
         for (char c : ch)
@@ -539,8 +518,8 @@ public class CommonUtils {
         return ((AndroidDriver<MobileElement>) driver).isKeyboardShown();
     }
 
-    public static String captureScreenShotAsBase64(RemoteWebDriver driver) {
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+    public static String captureScreenShotAsBase64() {
+        return ((TakesScreenshot) DriverManager.getDriver()).getScreenshotAs(OutputType.BASE64);
     }
 
     /**
@@ -593,25 +572,6 @@ public class CommonUtils {
         return getElement(driver, getLocator(xpath.replace("REPLACE", dynamicValue)));
     }
 
-    public static String getAppVideoRest(RemoteWebDriver driver) {
-        Response response = null;
-        String sessionId = driver.getSessionId().toString();
-        String platformName = driver.getCapabilities().getCapability("platformName").toString();
-        String url,publicUrl = "no url";
-        if(FrameworkVariables.PLATFORM.equalsIgnoreCase("browserstack")) {
-            if (platformName.equalsIgnoreCase("Android") | platformName.equalsIgnoreCase("ios")) {
-                url = "https://api.browserstack.com/app-automate/sessions/" + sessionId + ".json";
-
-                response = RestAssured.given().auth().basic(GetFrameworkKeys.getSecretsValue("browserStackUserName"), GetFrameworkKeys.getSecretsValue("browserStackAccessKey"))
-                        .header("Cookie", "tracking_id=" + UUID.randomUUID())
-                        .header("Connection", "keep-alive")
-                        .when().get(url);
-                publicUrl = response.getBody().jsonPath().get("automation_session.public_url").toString();
-            }
-        }
-        return publicUrl;
-    }
-
     /**
      * This method switches to iFrame
      *
@@ -633,27 +593,9 @@ public class CommonUtils {
      * @param element          The webElement to be clicked
      * @param timeOutInSeconds Max time in seconds to wait for the element to be enabled/clickable
      */
-    public static void waitForElementToEnableAndClick(RemoteWebDriver driver, WebElement element, int timeOutInSeconds) {
-        WaitUtils.waitForElementToEnable(driver, element, timeOutInSeconds);
+    public static void waitForElementToEnableAndClick(WebElement element, int timeOutInSeconds) {
+        WaitUtils.waitForElementToEnable(element, timeOutInSeconds);
         CommonUtils.clickByWebElement(element);
-    }
-
-    public static HashMap<String, String> getRecentApps() {
-        HashMap<String, String> map = new HashMap<>();
-        HttpResponse<JsonNode> response = null;
-        try {
-            response = Unirest.get("https://api-cloud.browserstack.com/app-live/recent_apps?limit=10")
-                    .basicAuth(GetFrameworkKeys.getSecretsValue("browserStackUserName"), GetFrameworkKeys.getSecretsValue("browserStackUserName"))
-                    .asJson();
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        }
-
-        for (Object e : response.getBody().getArray()) {
-            JSONObject json = (JSONObject) e;
-            map.put(json.get("app_name").toString(), json.get("app_url").toString());
-        }
-        return map;
     }
 
     /**
@@ -667,16 +609,8 @@ public class CommonUtils {
         return clipboardContent;
     }
 
-    public synchronized static void setBrowserStackStatus(RemoteWebDriver driver, boolean testStatus) {
-        try {
-            JavascriptExecutor jse = (JavascriptExecutor) driver;
-            if (testStatus) {
-                jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\"}}");
-            } else {
-                jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\"}}");
-            }
-        } catch (Exception e) {
-            logInfo("Not a browser stack driver");
-        }
+    public static boolean isIOSPlatform(){
+        return DriverManager.getDriver().getCapabilities().getCapability("platformName").toString().equalsIgnoreCase("ios");
     }
+
 }
